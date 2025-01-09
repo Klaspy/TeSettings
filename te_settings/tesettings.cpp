@@ -6,15 +6,26 @@ TeSettings::TeSettings(const QString &filePath)
     readFile();
 }
 
+void TeSettings::beginGroup(const QString &group)
+{
+    group_ = group;
+}
+
+void TeSettings::endGroup()
+{
+    group_ = "GENERAL";
+}
+
 void TeSettings::readFile()
 {
+    // Чистим содержимое и сбрасываем текущую группу
     data_ = {};
-    group_ = "GENERAL";
+    endGroup();
 
     if (!QFile::exists(filePath_))
     {
 #ifdef TE_SETTINGS_DEBUG
-        qWarning().noquote() << "File" << filePath_ << "not exist";
+        qWarning().noquote() << "Файл" << filePath_ << "не найден";
 #endif
         return;
     }
@@ -23,7 +34,7 @@ void TeSettings::readFile()
     if (!ini.open(QIODevice::ReadOnly))
     {
 #ifdef TE_SETTINGS_DEBUG
-        qWarning().noquote().nospace() << "Can't open " << filePath_ << ": " << ini.errorString();
+        qWarning().noquote().nospace() << "Не удалось открыть файл " << filePath_ << ": " << ini.errorString();
 #endif
         return;
     }
@@ -31,29 +42,79 @@ void TeSettings::readFile()
     int lineCnt = 0;
     while (true)
     {
-        char data[1000];
-        const qint64 res = ini.readLine(data, 1000);
-        if (res <= 0)
+        if (ini.atEnd())
         {
 #ifdef TE_SETTINGS_DEBUG
-            qWarning().noquote() << "End of file, line" << lineCnt;
+            qWarning().noquote() << "Конец файла, строка" << lineCnt;
 #endif
             break;
         }
 
-        QByteArray ba (data, res);
-        ba.replace('\n', "");
-        ba.replace('\r', "");
-
-#ifdef TE_SETTINGS_DEBUG
-        qDebug().noquote().nospace() << "Line " << lineCnt << ": " << ba;
-#endif
-
+        QString line (ini.readLine().simplified());
+        parseLine(line, lineCnt);
         lineCnt++;
     }
+
+    endGroup();
+
+    qDebug().noquote() << data_;
 }
 
 void TeSettings::writeFile()
 {
 
+}
+
+void TeSettings::parseLine(QString &line, const int &lineNum)
+{
+    // Пустая строка
+    if (line.isEmpty())
+    {
+        return;
+    }
+
+    // Начало группы
+    if (line.startsWith('['))
+    {
+        if (line.endsWith(']'))
+        {
+            group_ = line.mid(1, line.size() - 2);
+
+            if (!data_.contains(group_))
+            {
+                data_.insert(group_, QMap<QString, QString> {});
+            }
+        }
+        else
+        {
+#ifdef TE_SETTINGS_DEBUG
+            qCritical().noquote() << "Не найден завершающий символ ']' в строке" << lineNum;
+#endif
+            return;
+        }
+    }
+    else
+    {
+        const qsizetype equal_idx = line.indexOf('=');
+        const qsizetype comment_idx = line.indexOf(';');
+
+        if (equal_idx == -1)
+        {
+#ifdef TE_SETTINGS_DEBUG
+            qCritical().noquote() << "Не найден символ '=' в строке" << lineNum;
+#endif
+            return;
+        }
+
+        // Вырезаем комментарии если они есть
+        if (comment_idx != -1)
+        {
+            const QString comment (line.mid(comment_idx + 1));
+            line.remove(comment_idx, line.length());
+        }
+
+        const QString key (line.mid(0, equal_idx));
+        const QString value (line.mid(equal_idx + 1));
+        data_[group_].insert(key, value);
+    }
 }

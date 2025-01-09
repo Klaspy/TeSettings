@@ -14,14 +14,17 @@ class TeSettings
 {
 public:
     TeSettings(const QString &filePath);
+    void beginGroup(const QString &group);
+    void endGroup();
 
 private:
     void readFile();
     void writeFile();
+    void parseLine(QString &line, const int &lineNum);
 
 private:
     QString group_;
-    QVariantMap data_;
+    QMap<QString, QMap<QString, QString>> data_;
 
     QString filePath_;
 };
