@@ -134,6 +134,11 @@ void TeSettings::remove(QString key)
     if (data_.contains(group))
     {
         data_[group].params.remove(key);
+
+        if (data_[group].params.count() == 0)
+        {
+            data_.remove(group);
+        }
     }
 }
 
