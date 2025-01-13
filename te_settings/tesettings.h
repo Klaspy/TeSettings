@@ -3,30 +3,82 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QVariant>
-#include <QString>
 #include <QFile>
 #include <QMap>
 
-#define TE_SETTINGS_DEBUG
+// Этот дефайн включает дополнительный вывод для отладки возможных проблем парсинга
+// #define TE_SETTINGS_DEBUG
 
 class TeSettings
 {
 public:
-    TeSettings(const QString &filePath);
+    // Открыть файл filePath. Если autosave == true, то данные сохранятся в файл при вызове деструктора
+    TeSettings(const QString &filePath, const bool &autosave = true);
+    ~TeSettings();
+
+// Основные интерфейсные методы
+public:
+    // Зайти в группу group конфигурационного файла
     void beginGroup(const QString &group);
+
+    // Выйти из текущей группы конфигурационного файла
     void endGroup();
+
+    // Получить значение параметра key (если не найден, возвращается defaultValue
+    QVariant value(QString key, const QVariant &defaultValue = {}) const;
+    // Получить строку комментария к параметру key
+    QString comment(QString key) const;
+
+    // Записать значение параметра key (если не найден, возвращается defaultValue
+    void setValue(QString key, const QVariant &value);
+    // Записать строку комментария к параметру key
+    void setComment(QString key, const QString &comment);
+
+    // Проверить наличие параметра key
+    bool contains(QString key) const;
+
+    // Удалить параметр key
+    void remove(QString key);
+
+    QString toString() const;
+
+    // Принудительно вызвать процедуру сохранения в файл
+    void save();
+
+    friend QDebug operator<<(QDebug out, const TeSettings &settings)
+    {
+        return (out << settings.toString());
+    }
 
 private:
     void readFile();
     void writeFile();
     void parseLine(QString &line, const int &lineNum);
 
+    QString extractGroupName(QString &key) const;
+
+private:
+    struct ParamData
+    {
+        QString value;
+        QString comment;
+    };
+
+    struct GroupData
+    {
+        QMap<QString, ParamData> params;
+        QString comment;
+    };
+
 private:
     QString group_;
-    QMap<QString, QMap<QString, QString>> data_;
+    QString lastComment_;
+    QMap<QString, GroupData> data_;
 
     QString filePath_;
+
+    bool autosave_;
 };
+
 
 #endif // TESETTINGS_H
