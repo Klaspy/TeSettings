@@ -50,6 +50,8 @@ public:
 
     // Получить список названий всех параметров в виде группа/параметр
     QStringList childKeys() const;
+
+    // Получить список названий всех групп
     QStringList childGroups() const;
 
     void clear();
