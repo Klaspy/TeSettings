@@ -23,7 +23,7 @@ void TeSettings::beginGroup(const QString &group)
 
 void TeSettings::endGroup()
 {
-    group_ = "GENERAL";
+    group_ = "General";
 }
 
 QString TeSettings::extractGroupName(QString &key) const
