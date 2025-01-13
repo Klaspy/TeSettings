@@ -17,9 +17,12 @@ class TeSettings : public QObject
 class TeSettings
 #endif
 {
+#ifdef TE_SETTINGS_QOBJECT
+    Q_OBJECT
+#endif
 public:
 
-    #ifdef TE_SETTINGS_QOBJECT
+#ifdef TE_SETTINGS_QOBJECT
     // Открыть файл filePath. Если autosave == true, то данные сохранятся в файл при вызове деструктора
     TeSettings(const QString &filePath = "", const bool &autosave = true, QObject *parent = nullptr);
 #else
