@@ -340,6 +340,11 @@ QString TeSettings::toString() const
     {
         const GroupData &group (data_[groupName]);
 
+        if (group.params.count() == 0)
+        {
+            continue;
+        }
+
         if (!group.comment.isEmpty())
         {
             for (const auto &line : group.comment.split('\n'))
