@@ -1,13 +1,21 @@
 #include "tesettings.h"
 
+// Открыть файл filePath. Если autosave == true, то данные сохранятся в файл при вызове деструктора
+#ifdef TE_SETTINGS_QOBJECT
+TeSettings::TeSettings(const QString &filePath, const bool &autosave, QObject *parent)
+    : QObject   (parent)
+    , filePath_ (filePath)
+    , autosave_ (autosave)
+#else
 TeSettings::TeSettings(const QString &filePath, const bool &autosave)
     : filePath_ (filePath)
     , autosave_ (autosave)
+#endif
 {
-    if (!filePath_.isEmpty())
-    {
-        readFile();
-    }
+if (!filePath_.isEmpty())
+{
+    readFile();
+}
 }
 
 TeSettings::~TeSettings()
@@ -478,6 +486,15 @@ QStringList TeSettings::childGroups() const
 void TeSettings::clear()
 {
     data_.clear();
+}
+
+QString TeSettings::version()
+{
+#ifdef TE_SETTINGS_QOBJECT
+    return QString (APP_VERSION) + "-qml";
+#else
+    return APP_VERSION;
+#endif
 }
 
 

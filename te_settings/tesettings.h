@@ -8,16 +8,33 @@
 
 // Этот дефайн включает дополнительный вывод для отладки возможных проблем парсинга
 // #define TE_SETTINGS_DEBUG
+#define TE_SETTINGS_QOBJECT
 
+
+#ifdef TE_SETTINGS_QOBJECT
+class TeSettings : public QObject
+#else
 class TeSettings
+#endif
 {
 public:
+
+    #ifdef TE_SETTINGS_QOBJECT
     // Открыть файл filePath. Если autosave == true, то данные сохранятся в файл при вызове деструктора
+    TeSettings(const QString &filePath = "", const bool &autosave = true, QObject *parent = nullptr);
+#else
     TeSettings(const QString &filePath = "", const bool &autosave = true);
+#endif
     ~TeSettings();
 
+    static QString version();
+
 // Основные интерфейсные методы
+#ifdef TE_SETTINGS_QOBJECT
+public slots:
+#else
 public:
+#endif
     // Зайти в группу group конфигурационного файла
     void beginGroup(const QString &group);
 
@@ -60,6 +77,7 @@ public:
     {
         return (out << settings.toString());
     }
+
 
 private:
     void readFile();
