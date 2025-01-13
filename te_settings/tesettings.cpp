@@ -4,15 +4,17 @@ TeSettings::TeSettings(const QString &filePath, const bool &autosave)
     : filePath_ (filePath)
     , autosave_ (autosave)
 {
-    readFile();
-    writeFile();
+    if (!filePath_.isEmpty())
+    {
+        readFile();
+    }
 }
 
 TeSettings::~TeSettings()
 {
     if (autosave_)
     {
-        writeFile();
+        save();
     }
 }
 
@@ -102,18 +104,20 @@ void TeSettings::setComment(QString key, const QString &comment)
     // Если есть '/', значит название группы включено в ключ. Надо разбить
     const QString group (extractGroupName(key));
 
-    if (data_.contains(group))
+    if (!data_.contains(group))
     {
-        auto &params (data_[group].params);
-        if (params.contains(key))
-        {
-            params[key].comment = comment;
-        }
+        data_.insert(group, {});
+    }
 
-        if (key.isEmpty())
-        {
-            data_[group].comment = comment;
-        }
+    auto &params (data_[group].params);
+    if (params.contains(key))
+    {
+        params[key].comment = comment;
+    }
+
+    if (key.isEmpty())
+    {
+        data_[group].comment = comment;
     }
 
     return;
@@ -410,14 +414,70 @@ QString TeSettings::toString() const
         result.append('\n');
     }
 
-    result.remove(result.length() - 2, 2);
+    result.remove(result.length() - 2, 1);
 
     return result;
 }
 
-void TeSettings::save()
+void TeSettings::save(const QString &filePath)
 {
-    writeFile();
+    if (filePath_.isEmpty())
+    {
+        filePath_ = filePath;
+    }
+
+    if (!filePath_.isEmpty())
+    {
+        writeFile();
+    }
+}
+
+QStringList TeSettings::allKeys() const
+{
+    QStringList res;
+    const auto groups (data_.keys());
+
+    for (const auto &group : groups)
+    {
+        const auto params (data_[group].params.keys());
+
+        if (group == "General")
+        {
+            for (const auto &param : params)
+            {
+                res.append(param);
+            }
+        }
+        else
+        {
+            for (const auto &param : params)
+            {
+                res.append(group + "/" + param);
+            }
+        }
+    }
+
+    return res;
+}
+
+QStringList TeSettings::childKeys() const
+{
+    if (data_.contains(group_))
+    {
+        return data_[group_].params.keys();
+    }
+
+    return {};
+}
+
+QStringList TeSettings::childGroups() const
+{
+    return data_.keys();
+}
+
+void TeSettings::clear()
+{
+    data_.clear();
 }
 
 

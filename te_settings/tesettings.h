@@ -13,7 +13,7 @@ class TeSettings
 {
 public:
     // Открыть файл filePath. Если autosave == true, то данные сохранятся в файл при вызове деструктора
-    TeSettings(const QString &filePath, const bool &autosave = true);
+    TeSettings(const QString &filePath = "", const bool &autosave = true);
     ~TeSettings();
 
 // Основные интерфейсные методы
@@ -43,7 +43,16 @@ public:
     QString toString() const;
 
     // Принудительно вызвать процедуру сохранения в файл
-    void save();
+    void save(const QString &filePath = "");
+
+    // Получить список названий всех параметров в виде группа/параметр
+    QStringList allKeys() const;
+
+    // Получить список названий всех параметров в виде группа/параметр
+    QStringList childKeys() const;
+    QStringList childGroups() const;
+
+    void clear();
 
     friend QDebug operator<<(QDebug out, const TeSettings &settings)
     {
