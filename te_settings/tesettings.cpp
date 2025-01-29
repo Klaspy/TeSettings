@@ -2,14 +2,15 @@
 
 // Открыть файл filePath. Если autosave == true, то данные сохранятся в файл при вызове деструктора
 #ifdef TE_SETTINGS_QOBJECT
-TeSettings::TeSettings(const QString &filePath, const bool &autosave, QObject *parent)
+TeSettings::TeSettings(const QString &filePath, const bool &commentNewLine, const bool &autosave, QObject *parent)
     : QObject   (parent)
     , filePath_ (filePath)
     , autosave_ (autosave)
 #else
-TeSettings::TeSettings(const QString &filePath, const bool &autosave)
-    : filePath_ (filePath)
-    , autosave_ (autosave)
+TeSettings::TeSettings(const QString &filePath, const bool &commentNewLine, const bool &autosave)
+    : filePath_         (filePath)
+    , commentNewLine_   (commentNewLine)
+    , autosave_         (autosave)
 #endif
 {
 if (!filePath_.isEmpty())
@@ -395,9 +396,9 @@ QString TeSettings::toString() const
             const ParamData &param (group.params[paramName]);
             result.append('\n');
 
-            const QStringList commentLines (param.comment.split('\n'));
+            const QStringList commentLines (param.comment.split('\n', Qt::SkipEmptyParts));
 
-            if (commentLines.length() > 1)
+            if (commentNewLine_ || commentLines.length() > 1)
             {
                 for (const auto &line : commentLines)
                 {
@@ -411,7 +412,7 @@ QString TeSettings::toString() const
             result.append('=');
             result.append(param.value);
 
-            if (commentLines.length() == 1 && !commentLines.first().isEmpty())
+            if (!commentNewLine_ && commentLines.length() == 1 && !commentLines.first().isEmpty())
             {
                 result.append("\t; ");
                 result.append(commentLines.first());

@@ -28,7 +28,7 @@ public:
     // Открыть файл filePath. Если autosave == true, то данные сохранятся в файл при вызове деструктора
     TeSettings(const QString &filePath = "", const bool &autosave = true, QObject *parent = nullptr);
 #else
-    TeSettings(const QString &filePath = "", const bool &autosave = true);
+    TeSettings(const QString &filePath = "", const bool &commentNewLine = false, const bool &autosave = true);
 #endif
     ~TeSettings();
 
@@ -108,6 +108,7 @@ private:
 
     QString filePath_;
 
+    bool commentNewLine_;
     bool autosave_;
 };
 
