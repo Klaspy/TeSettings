@@ -413,7 +413,7 @@ QString TeSettings::toString() const
 
             if (commentLines.length() == 1 && !commentLines.first().isEmpty())
             {
-                result.append(" ; ");
+                result.append("\t; ");
                 result.append(commentLines.first());
             }
 

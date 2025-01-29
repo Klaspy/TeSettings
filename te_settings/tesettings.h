@@ -8,7 +8,9 @@
 
 // Этот дефайн включает дополнительный вывод для отладки возможных проблем парсинга
 // #define TE_SETTINGS_DEBUG
-#define TE_SETTINGS_QOBJECT
+
+// Этот дефайн дополняет класс до QObject'а, чтобы его можно было использовать из QML
+// #define TE_SETTINGS_QOBJECT
 
 
 #ifdef TE_SETTINGS_QOBJECT
