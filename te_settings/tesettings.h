@@ -76,10 +76,7 @@ public:
 
     void clear();
 
-    friend QDebug operator<<(QDebug out, const TeSettings &settings)
-    {
-        return (out << settings.toString());
-    }
+    friend QDebug operator<<(QDebug out, const TeSettings &settings);
 
 
 private:

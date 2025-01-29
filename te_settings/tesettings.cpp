@@ -497,4 +497,8 @@ QString TeSettings::version()
 #endif
 }
 
+QDebug operator<<(QDebug out, const TeSettings &settings)
+{
+    return (out << settings.toString());
+}
 
