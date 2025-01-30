@@ -4,7 +4,7 @@ CONFIG += c++17 console
 CONFIG -= app_bundle
 
 
-VERSION = 1.0.0.0
+VERSION = 1.0.2
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 CONFIG(debug, debug |release) {

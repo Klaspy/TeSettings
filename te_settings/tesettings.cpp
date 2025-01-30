@@ -203,7 +203,7 @@ void TeSettings::readFile()
 void TeSettings::writeFile()
 {
     QFile ini (filePath_);
-    if (!ini.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    if (!ini.open(QIODevice::ReadWrite))
     {
 #ifdef TE_SETTINGS_DEBUG
         qWarning().noquote().nospace() << "Не удалось открыть файл " << filePath_ << ": " << ini.errorString();
@@ -211,7 +211,20 @@ void TeSettings::writeFile()
         return;
     }
 
-    ini.write(this->toString().toUtf8());
+    const QByteArray before (ini.readAll());
+    const QByteArray toWrite (this->toString().toUtf8());
+    if (before != toWrite)
+    {
+        ini.resize(0);
+        ini.write(toWrite);
+    }
+#ifdef TE_SETTINGS_DEBUG
+    else
+    {
+        qDebug().noquote() << "Не пишем файл";
+    }
+#endif
+
     ini.close();
 }
 
