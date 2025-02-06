@@ -80,6 +80,13 @@ public:
 
     friend QDebug operator<<(QDebug out, const TeSettings &settings);
 
+    enum CommentSeparators {
+        Semilicon = int(';'),
+        Hashtag = int('#')
+    };
+
+    static char getCommentSeparator() {return commentSeparator;}
+    static void setCommentSeparator(CommentSeparators separator);
 
 private:
     void readFile();
@@ -110,6 +117,8 @@ private:
 
     bool commentNewLine_;
     bool autosave_;
+
+    static char commentSeparator;
 };
 
 
