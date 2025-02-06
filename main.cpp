@@ -7,6 +7,8 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+    TeSettings::setCommentSeparator(TeSettings::Hashtag);
+
     {
         TeSettings s1 ("./../TeSettings/test1.ini");
         s1.setValue("param1", "value1");

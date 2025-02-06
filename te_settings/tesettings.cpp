@@ -377,7 +377,8 @@ QString TeSettings::toString() const
         {
             for (const auto &line : group.comment.split('\n'))
             {
-                result.append("; ");
+                result.append(commentSeparator);
+                result.append(' ');
                 result.append(line);
                 result.append('\n');
             }
@@ -417,7 +418,8 @@ QString TeSettings::toString() const
             {
                 for (const auto &line : commentLines)
                 {
-                    result.append("; ");
+                    result.append(commentSeparator);
+                    result.append(' ');
                     result.append(line);
                     result.append('\n');
                 }
@@ -429,7 +431,9 @@ QString TeSettings::toString() const
 
             if (!commentNewLine_ && commentLines.length() == 1 && !commentLines.first().isEmpty())
             {
-                result.append("\t; ");
+                result.append('\t');
+                result.append(commentSeparator);
+                result.append(' ');
                 result.append(commentLines.first());
             }
 
@@ -502,6 +506,16 @@ QStringList TeSettings::childGroups() const
 void TeSettings::clear()
 {
     data_.clear();
+}
+
+char TeSettings::commentSeparator = char(TeSettings::Semilicon);
+
+void TeSettings::setCommentSeparator(CommentSeparators separator)
+{
+    if (separator == CommentSeparators::Hashtag || separator == CommentSeparators::Semilicon)
+    {
+        commentSeparator = char(separator);
+    }
 }
 
 QString TeSettings::version()
