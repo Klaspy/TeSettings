@@ -1,0 +1,12 @@
+#ifndef TE_SETTINGSGLOBAL_H
+#define TE_SETTINGSGLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(TE_SETTINGS_LIBRARY)
+#define TE_SETTINGS_EXPORT Q_DECL_EXPORT
+#else
+#define TE_SETTINGS_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // TE_SETTINGSGLOBAL_H
