@@ -6,6 +6,7 @@ CONFIG -= app_bundle
 
 VERSION = 1.0.2
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += TE_SETTINGS_LIBRARY
 
 CONFIG(debug, debug |release) {
     TEMPLATE = app
@@ -13,6 +14,7 @@ CONFIG(debug, debug |release) {
     DESTDIR = $$PWD/lib/te_settings
     TEMPLATE = lib
     QMAKE_POST_LINK += cp $$PWD/te_settings/tesettings.h $$PWD/lib/te_settings/tesettings.h
+    win32: HEADERS += te_settings/te_settingsGlobal.h
 }
 
 
@@ -21,7 +23,6 @@ CONFIG(debug, debug |release) {
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp \
         te_settings/tesettings.cpp
 
 # Default rules for deployment.

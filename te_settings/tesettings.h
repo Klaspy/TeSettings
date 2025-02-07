@@ -6,6 +6,10 @@
 #include <QFile>
 #include <QMap>
 
+#ifdef Q_OS_WIN
+#include "te_settingsGlobal.h"
+#endif
+
 // Этот дефайн включает дополнительный вывод для отладки возможных проблем парсинга
 // #define TE_SETTINGS_DEBUG
 
@@ -13,10 +17,13 @@
 // #define TE_SETTINGS_QOBJECT
 
 
+class
+#ifdef Q_OS_WIN
+    TE_SETTINGS_EXPORT
+#endif
+    TeSettings
 #ifdef TE_SETTINGS_QOBJECT
-class TeSettings : public QObject
-#else
-class TeSettings
+    : public QObject
 #endif
 {
 #ifdef TE_SETTINGS_QOBJECT
