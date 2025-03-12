@@ -4,7 +4,7 @@ CONFIG += c++17 console
 CONFIG -= app_bundle
 
 
-VERSION = 1.0.2
+VERSION = 1.0.3
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += TE_SETTINGS_LIBRARY
 

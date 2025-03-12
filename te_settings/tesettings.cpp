@@ -243,7 +243,7 @@ void TeSettings::parseLine(QString &line, const int &lineNum)
     }
 
     // Комментарий
-    if (line.startsWith(';') || line.startsWith('#'))
+    if (line.startsWith(commentSeparator))
     {
 #ifdef TE_SETTINGS_DEBUG
         qDebug().noquote() << "Найден комментарий";
@@ -258,8 +258,7 @@ void TeSettings::parseLine(QString &line, const int &lineNum)
     else if (line.startsWith('['))
     {
         const qsizetype end_idx (line.indexOf(']'));
-        const qsizetype comment_idx (line.indexOf(';') > line.indexOf('#') ?
-                                     line.indexOf(';') : line.indexOf('#'));
+        const qsizetype comment_idx (line.indexOf(commentSeparator));
 
         if (end_idx == -1)
         {
@@ -316,8 +315,7 @@ void TeSettings::parseLine(QString &line, const int &lineNum)
         qDebug().noquote() << "Найден параметр";
 #endif
         const qsizetype equal_idx = line.indexOf('=');
-        const qsizetype comment_idx = line.indexOf(';') > line.indexOf('#') ?
-                                      line.indexOf(';') : line.indexOf('#');
+        const qsizetype comment_idx = line.indexOf(commentSeparator);
 
         if (equal_idx == -1)
         {
