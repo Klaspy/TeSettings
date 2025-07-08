@@ -5,9 +5,14 @@
 #include <QDebug>
 #include <QFile>
 #include <QMap>
+#include <QVariant>
 
 #ifdef Q_OS_WIN
-#include "te_settingsGlobal.h"
+#if defined(TE_SETTINGS_LIBRARY)
+#define TE_SETTINGS_EXPORT Q_DECL_EXPORT
+#else
+#define TE_SETTINGS_EXPORT Q_DECL_IMPORT
+#endif
 #endif
 
 // Этот дефайн включает дополнительный вывод для отладки возможных проблем парсинга

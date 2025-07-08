@@ -3,19 +3,16 @@ QT -= gui
 CONFIG += c++17 console
 CONFIG -= app_bundle
 
+TARGET = TeSettings
 
 VERSION = 1.0.3
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += TE_SETTINGS_LIBRARY
 
-CONFIG(debug, debug |release) {
-    TEMPLATE = app
-} else {
-    DESTDIR = $$PWD/lib/te_settings
-    TEMPLATE = lib
-    QMAKE_POST_LINK += cp $$PWD/te_settings/tesettings.h $$PWD/lib/te_settings/tesettings.h
-    win32: HEADERS += te_settings/te_settingsGlobal.h
-}
+TEMPLATE = lib
+DESTDIR = $$PWD/lib/te_settings
+win32: QMAKE_POST_LINK += $$QMAKE_COPY $$system_path($$PWD/te_settings/tesettings.h) $$system_path($$PWD/lib/te_settings/tesettings.h)
+else: QMAKE_POST_LINK += cp $$PWD/te_settings/tesettings.h $$PWD/lib/te_settings/tesettings.h
 
 
 # You can make your code fail to compile if it uses deprecated APIs.

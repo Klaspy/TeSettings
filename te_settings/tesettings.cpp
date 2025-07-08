@@ -105,7 +105,10 @@ void TeSettings::setValue(QString key, const QVariant &value)
     }
 
     auto &params (data_[group].params);
-    params.insert(key, ParamData {.value = value.toString(), .comment = ""});
+    ParamData paramData;
+    paramData.value = value.toString();
+    paramData.comment = "";
+    params.insert(key, paramData);
 }
 
 void TeSettings::setComment(QString key, const QString &comment)
@@ -304,7 +307,10 @@ void TeSettings::parseLine(QString &line, const int &lineNum)
         // Если ещё нет такой группы
         if (!data_.contains(group_))
         {
-            data_.insert(group_, GroupData {.params = {}, .comment = lastComment_});
+            GroupData groupData;
+            groupData.params = {};
+            groupData.comment = lastComment_;
+            data_.insert(group_, groupData);
             lastComment_.clear();
         }
     }
@@ -353,7 +359,10 @@ void TeSettings::parseLine(QString &line, const int &lineNum)
 
         const QString key (line.mid(0, equal_idx).trimmed());
         const QString value (line.mid(equal_idx + 1).trimmed());
-        data_[group_].params.insert(key, ParamData {.value = value, .comment = lastComment_});
+        ParamData paramData;
+        paramData.value = value;
+        paramData.comment = lastComment_;
+        data_[group_].params.insert(key, paramData);
         lastComment_.clear();
     }
 }

@@ -5,3 +5,6 @@ TeSettings.pro.user.98dd4ea
 TeSettings.pro.user
 *.user
 /lib
+/build-TeSettings-Desktop_Qt_5_15_2_MSVC2019_64bit
+*.stash
+/build-TeSettings-Desktop_Qt_6_9_0_MinGW_64_bit
