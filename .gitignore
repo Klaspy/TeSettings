@@ -8,3 +8,5 @@ TeSettings.pro.user
 /build-TeSettings-Desktop_Qt_5_15_2_MSVC2019_64bit
 *.stash
 /build-TeSettings-Desktop_Qt_6_9_0_MinGW_64_bit
+/build-TeSettings-Desktop_Qt_5_15_2_MinGW_64_bit
+/build-TeSettings-Desktop_Qt_6_9_1_MinGW_64_bit

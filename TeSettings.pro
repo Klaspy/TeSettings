@@ -3,7 +3,8 @@ QT -= gui
 CONFIG += c++17 console
 CONFIG -= app_bundle
 
-TARGET = TeSettings
+CONFIG(debug, debug|release) TARGET = TeSettingsd
+CONFIG(release, debug|release) TARGET = TeSettings
 
 VERSION = 1.0.3
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
